@@ -60,6 +60,7 @@ def build_dashboard_analysis_prompt(
     - Sauts de ligne entre les paragraphes
     - Langage clair et accessible
     - Pas de formules d'introduction/conclusion ("En résumé", "Pour conclure", etc.) 
+    - Il s'agit d'un rapport destiné à des clients non techniques. Les données proviennent d'un dashboard immobilier locatif.
     """
     
     return prompt.strip()
@@ -83,7 +84,8 @@ def build_single_chart_analysis_prompt(chart_type, city1, city2, context):
     
     Rédige une analyse en 2-3 paragraphes courts et fluides.
     Décris ce que montre le graphique, les insights clés, et les conclusions pratiques.
-    
+    Il s'agit d'un rapport destiné à des clients non techniques. Les données proviennent d'un dashboard immobilier locatif.
+    Fais en sorte de ne pas utiliser des formules génériques comme "ce graphique montre que...", "en conclusion...".
     Format :
     - Texte en paragraphes (pas de listes, pas de numérotation)
     - Sauts de ligne entre paragraphes
@@ -112,7 +114,7 @@ def build_pdf_report_prompt(city1, city2, all_stats):
     5. Distribution géographique (1 page)
     6. Recommandations (1 page)
     
-    Utilise un ton professionnel mais accessible.
+    Utilise un ton professionnel mais accessible. Il s'agit d'un rapport destiné à des clients non techniques. Les données proviennent d'un dashboard immobilier locatif.
     """
     
     return prompt.strip()
