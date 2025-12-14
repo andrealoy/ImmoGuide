@@ -116,7 +116,7 @@ sudo apt-get install fonts-dejavu
 1. **Cloner le dépôt**
 ```bash
 git clone https://github.com/andrealoy/ImmoGuide/
-cd scrap_immo
+cd ImmoGuide
 ```
 
 2. **Créer un environnement virtuel**
