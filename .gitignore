@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# VSCode
+.vscode/
+
+# Data / scraping
+cookies/
+imgs/
+jsons/
+config/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Flags / runtime
+stop_scraping.flag
+
+# OS
+.DS_Store
+Thumbs.db
