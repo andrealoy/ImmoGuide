@@ -56,7 +56,7 @@ Application web complète pour scraper, analyser et comparer les données immobi
 ## 📁 Structure du Projet
 
 ```
-scrap_immo/
+immoGuide/
 ├── app.py                      # Point d'entrée Streamlit
 ├── orchestrator.py             # Orchestration du scraping
 ├── requirements.txt            # Dépendances Python
