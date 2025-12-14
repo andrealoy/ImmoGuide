@@ -21,6 +21,7 @@ streamlit-keyup==0.3.0
 streamlit-notify==0.3.1
 streamlit-toggle-switch==1.0.2
 streamlit-vertical-slider==2.5.5
+shapely==2.1.2
 plotly==6.5.0
 pydeck==0.9.1
 altair==6.0.0
