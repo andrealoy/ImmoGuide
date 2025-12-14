@@ -1,4 +1,4 @@
-# 🏠 ScrapImmo - Analyse Immobilière Automatisée
+# 🏠 ImmoGuide- Analyse Immobilière Automatisée
 
 Application web complète pour scraper, analyser et comparer les données immobilières locatives de différentes villes françaises avec génération automatique de rapports PDF enrichis par IA.
 
