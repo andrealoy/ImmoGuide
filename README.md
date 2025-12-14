@@ -115,7 +115,7 @@ sudo apt-get install fonts-dejavu
 
 1. **Cloner le dépôt**
 ```bash
-git clone https://github.com/votre-username/scrap_immo.git
+git clone https://github.com/andrealoy/ImmoGuide/
 cd scrap_immo
 ```
 
@@ -159,19 +159,6 @@ Créer `config/api_key.json` :
 ```bash
 # .env
 OPENAI_API_KEY=sk-votre-cle-api
-```
-
-### 2. Cookies SeLoger (optionnel)
-
-Pour éviter les blocages, créer `cookies/seloger_cookies.json` :
-```json
-[
-  {
-    "name": "cookie_name",
-    "value": "cookie_value",
-    "domain": ".seloger.com"
-  }
-]
 ```
 
 ## 📖 Utilisation
@@ -295,14 +282,3 @@ which chromedriver  # Vérifier l'installation
 ## 📄 Licence
 
 MIT License - Libre d'utilisation et de modification
-
-## 👤 Auteur
-
-Projet développé pour l'analyse comparative du marché immobilier locatif français.
-
-## 🙏 Remerciements
-
-- **Streamlit** pour le framework web
-- **Plotly** pour les visualisations
-- **OpenAI** pour l'API Vision
-- **ReportLab** pour la génération PDF
