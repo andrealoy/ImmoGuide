@@ -120,7 +120,7 @@ class PDFReportGenerator:
             parent=self.styles['Heading1'],
             fontName=DEFAULT_FONT_BOLD,
             fontSize=24,
-            textColor='#0062f4',
+            textColor="#0f489d",
             spaceAfter=30,
             alignment=TA_CENTER
         ))
@@ -131,7 +131,7 @@ class PDFReportGenerator:
             parent=self.styles['Heading2'],
             fontName=DEFAULT_FONT_BOLD,
             fontSize=16,
-            textColor='#d400ff',
+            textColor="#32597f",
             spaceBefore=20,
             spaceAfter=12
         ))
