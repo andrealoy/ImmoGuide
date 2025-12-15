@@ -100,108 +100,131 @@ immoGuide/
 ## 🏗️ Architecture du Projet
 
 ```mermaid
-graph TB
-    subgraph "🖥️ Interface Streamlit"
-        UI1[1_Scrapper.py<br/>Lancement Scraping]
-        UI2[2_Visualiser.py<br/>Dashboard + IA]
-        UI3[3_Configuration.py<br/>API Keys]
-    end
+flowchart LR
 
-    subgraph "🔧 Core - Scraping"
-        ORCH[orchestrator.py<br/>Coordination]
-        RUNNER[runner.py<br/>Boucle Multi-Villes]
-        SCRAPER[scraper.py<br/>Extraction API]
-        HTTP[http.py<br/>Gestion Cookies/Retry]
-        CLEANER[cleaner.py<br/>Nettoyage Données]
-        LOCATION[location.py<br/>Autocomplete Ville]
-    end
+%% =======================
+%% UI
+%% =======================
+subgraph UI["🖥️ Streamlit"]
+  UI1["1_Scrapper.py<br/>Lancer scraping"]
+  UI2["2_Visualiser.py<br/>Dashboard + IA"]
+  UI3["3_Configuration.py<br/>API Keys"]
+end
 
-    subgraph "🔐 Authentification"
-        COOKIES[get_cookie_headers.py<br/>Selenium Chrome]
-        COOKIE_FILE[cookies/seloger_cookies.json]
-    end
+%% =======================
+%% SCRAPING CORE
+%% =======================
+subgraph CORE["🔧 Core Scraping"]
+  ORCH["orchestrator.py<br/>Coordination"]
+  RUNNER["runner.py<br/>Multi-villes"]
+  LOCATION["location.py<br/>Autocomplete ville"]
+  SCRAPER["scraper.py<br/>Extraction API"]
+  HTTP["http.py<br/>Cookies / Retry"]
+  CLEANER["cleaner.py<br/>Nettoyage / Export"]
+end
 
-    subgraph "📊 Visualisations"
-        PLOTS[plots.py<br/>Plotly Charts]
-        MAPS[maps.py<br/>Pydeck Maps]
-        STATS[stats.py<br/>Statistiques]
-    end
+%% =======================
+%% AUTH
+%% =======================
+subgraph AUTH["🔐 Auth"]
+  COOKIES["get_cookie_headers.py<br/>Selenium (Chrome)"]
+  COOKIE_FILE["cookies/seloger_cookies.json"]
+end
 
-    subgraph "🤖 Intelligence Artificielle"
-        GPT[gpt_assistant.py<br/>OpenAI API]
-        PROMPTS[prompts.py<br/>Templates]
-        PDF[pdf_generator.py<br/>Rapports PDF]
-    end
+%% =======================
+%% STORAGE
+%% =======================
+subgraph STORE["💾 Stockage"]
+  JSON_DATA[("jsons/<br/>données brutes")]
+  CSV_DATA[("data/<br/>CSV nettoyés")]
+  IMAGES[("imgs/<br/>captures + PDF")]
+end
 
-    subgraph "📸 Capture d'écran"
-        IMG_SERVICE[dashboard_to_image.py<br/>Selenium Screenshots]
-    end
+%% =======================
+%% API
+%% =======================
+subgraph EXT["🌐 Externe"]
+  API["SeLoger API<br/>autocomplete / search-bff / classifieds"]
+end
 
-    subgraph "💾 Stockage"
-        JSON_DATA[(jsons/<br/>Données Brutes)]
-        CSV_DATA[(data/<br/>CSV Nettoyés)]
-        IMAGES[(imgs/<br/>PNG/PDF)]
-    end
+%% =======================
+%% VISU
+%% =======================
+subgraph VIZ["📊 Visualisations"]
+  PLOTS["plots.py<br/>Plotly"]
+  MAPS["maps.py<br/>Pydeck"]
+  STATS["stats.py<br/>Stats"]
+end
 
-    subgraph "🌐 API SeLoger"
-        API[SeLoger API<br/>search-bff/autocomplete]
-    end
+%% =======================
+%% AI
+%% =======================
+subgraph AI["🤖 IA & Reporting"]
+  IMG_SERVICE["dashboard_to_image.py<br/>Screenshot Selenium"]
+  GPT["gpt_assistant.py<br/>OpenAI API"]
+  PROMPTS["prompts.py<br/>Templates"]
+  PDF["pdf_generator.py<br/>Rapport PDF"]
+end
 
-    %% Flux Scraping
-    UI1 -->|Thread daemon| ORCH
-    ORCH --> RUNNER
-    RUNNER -->|Pour chaque ville| SCRAPER
-    SCRAPER -->|Requêtes HTTP| HTTP
-    HTTP -->|Charge cookies| COOKIE_FILE
-    COOKIES -->|Génère| COOKIE_FILE
-    SCRAPER -->|Sauvegarde JSON| JSON_DATA
-    CLEANER -->|Lit| JSON_DATA
-    CLEANER -->|Export CSV| CSV_DATA
-    UI1 -->|Résolution ID| LOCATION
-    LOCATION -->|Autocomplete| API
+%% =======================
+%% PIPELINE 1 — Scraping
+%% =======================
+UI1 -->|start| ORCH
+ORCH --> RUNNER
+RUNNER -->|for each city| SCRAPER
+SCRAPER -->|HTTP requests| HTTP
+HTTP -->|load| COOKIE_FILE
+COOKIES -->|generate/update| COOKIE_FILE
 
-    %% Flux Visualisation
-    UI2 -->|Charge données| CSV_DATA
-    UI2 -->|Génère graphiques| PLOTS
-    UI2 -->|Génère cartes| MAPS
-    PLOTS --> STATS
-    MAPS --> STATS
+UI1 -->|resolve city id| LOCATION
+LOCATION -->|autocomplete| API
+SCRAPER -->|call search , classifieds| API
 
-    %% Flux IA
-    UI2 -->|Bouton Analyser| IMG_SERVICE
-    IMG_SERVICE -->|Capture dashboard| IMAGES
-    UI2 -->|Prompt + Image| GPT
-    GPT -->|Utilise| PROMPTS
-    UI2 -->|Bouton PDF| PDF
-    PDF -->|Génère analyses| GPT
-    PDF -->|Exporte| IMAGES
+SCRAPER -->|write| JSON_DATA
+CLEANER -->|read| JSON_DATA
+CLEANER -->|export| CSV_DATA
 
-    %% Style
-    classDef uiClass fill:#0062f4,stroke:#003d99,color:#fff
-    classDef coreClass fill:#28a745,stroke:#1e7e34,color:#fff
-    classDef vizClass fill:#d400ff,stroke:#9900cc,color:#fff
-    classDef aiClass fill:#ff6b35,stroke:#cc5529,color:#fff
-    classDef storageClass fill:#6c757d,stroke:#495057,color:#fff
-    classDef authClass fill:#ffc107,stroke:#cc9a06,color:#000
+%% =======================
+%% PIPELINE 2 — Dashboard
+%% =======================
+UI2 -->|load| CSV_DATA
+UI2 --> PLOTS
+UI2 --> MAPS
+UI2 --> STATS
 
-    class UI1,UI2,UI3 uiClass
-    class ORCH,RUNNER,SCRAPER,HTTP,CLEANER,LOCATION coreClass
-    class PLOTS,MAPS,STATS vizClass
-    class GPT,PROMPTS,PDF aiClass
-    class COOKIES,COOKIE_FILE authClass
-    class JSON_DATA,CSV_DATA,IMAGES storageClass
+%% =======================
+%% PIPELINE 3 — IA + PDF
+%% =======================
+UI2 -->|analyze| IMG_SERVICE
+IMG_SERVICE -->|save capture| IMAGES
+
+UI2 -->|prompt + image| GPT
+GPT --> PROMPTS
+
+UI2 -->|generate PDF| PDF
+PDF -->|ask GPT| GPT
+PDF -->|export| IMAGES
+
+%% =======================
+%% STYLES
+%% =======================
+classDef ui fill:#0062f4,stroke:#003d99,color:#fff
+classDef core fill:#28a745,stroke:#1e7e34,color:#fff
+classDef auth fill:#ffc107,stroke:#cc9a06,color:#000
+classDef store fill:#6c757d,stroke:#495057,color:#fff
+classDef viz fill:#d400ff,stroke:#9900cc,color:#fff
+classDef ai fill:#ff6b35,stroke:#cc5529,color:#fff
+classDef ext fill:#17a2b8,stroke:#0f6674,color:#fff
+
+class UI1,UI2,UI3 ui
+class ORCH,RUNNER,LOCATION,SCRAPER,HTTP,CLEANER core
+class COOKIES,COOKIE_FILE auth
+class JSON_DATA,CSV_DATA,IMAGES store
+class PLOTS,MAPS,STATS viz
+class IMG_SERVICE,GPT,PROMPTS,PDF ai
+class API ext
+
 ```
-
-### Légende des Flux
-
-| Couleur | Module | Description |
-|---------|--------|-------------|
-| 🔵 Bleu | Interface | Pages Streamlit (UI utilisateur) |
-| 🟢 Vert | Core | Logique de scraping et traitement |
-| 🟣 Violet | Viz | Génération des visualisations |
-| 🟠 Orange | IA | Services OpenAI et génération PDF |
-| 🟡 Jaune | Auth | Gestion authentification SeLoger |
-| ⚫ Gris | Storage | Persistance des données |
 
 ## 🚀 Installation
 
